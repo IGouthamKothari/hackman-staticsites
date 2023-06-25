@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Soil Testing Appointment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to bottom, skyblue, white);
+            padding: 20px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Soil Testing Appointment</h1>
+
+        <!-- Appointment Form -->
+        <form id="appointmentForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="id">ID:</label>
+                <input type="text" id="id" name="id" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Submit Request</button>
+        </form>
+
+        <div id="receipt" class="mt-4" style="display: none;">
+            <h4 class="text-center">Appointment Receipt</h4>
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>Appointment ID:</strong> <span id="appointmentId"></span></p>
+                    <p><strong>Date:</strong> <span id="appointmentDate"></span></p>
+                    <p><strong>Time:</strong> <span id="appointmentTime"></span></p>
+                    <p><strong>Testing Center:</strong> <span id="centerName"></span></p>
+                    <p><strong>Address:</strong> <span id="centerAddress"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        // Generate random appointment ID
+        function generateAppointmentId() {
+            var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            var appointmentId = '';
+            for (var i = 0; i < 6; i++) {
+                var randomIndex = Math.floor(Math.random() * chars.length);
+                appointmentId += chars.charAt(randomIndex);
+            }
+            return appointmentId;
+        }
+
+        // Get current date and time
+        function getCurrentDateTime() {
+            var currentDate = new Date().toLocaleDateString();
+            var currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            return { date: currentDate, time: currentTime };
+        }
+
+        // Submit form
+        $('#appointmentForm').submit(function(event) {
+            event.preventDefault();
+
+            // Get form data
+            var formData = $(this).serializeArray().reduce(function(obj, item) {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
+
+            // Generate appointment ID, date, and time
+            var appointmentId = generateAppointmentId();
+            var currentDateTime = getCurrentDateTime();
+
+            // Display receipt
+            $('#appointmentId').text(appointmentId);
+            $('#appointmentDate').text(currentDateTime.date);
+            $('#appointmentTime').text(currentDateTime.time);
+            $('#centerName').text('XYZ Testing Center'); // Replace with the actual name of the testing center
+            $('#centerAddress').text('123 Testing Street, City'); // Replace with the actual address of the testing center
+            $('#receipt').show();
+
+            // Clear form
+            $(this).trigger('reset');
+        });
+    </script>
+</body>
+</html>
